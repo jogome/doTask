@@ -1,4 +1,16 @@
+
+h1 { /* Main page title*/
+	padding-top: 2em;
+	padding-bottom: 1.5em;
+	text-align: center;
+	color: #11283C;
+}
+
 /*Template getTasksForm group */
+div.form-group {
+	padding-top: 5em;
+}
+
 button.js-btn-add-task {
 	width: 4em;
 	height: 4em;
@@ -9,7 +21,7 @@ button.js-btn-add-task {
 	outline: 0;
 }
 
-.gliphicon-plus {
+button.gliphicon-plus {
 	font-size: 1.5em;
 	word-spacing: -10px;
 }
@@ -30,4 +42,87 @@ input[type=text] {
 .btn-success {
 	height: 3em; 
 }
+/*END Template getTasksForm group */
+
+/*Template taskWindow group */
+div.title, .modal-header {
+	height: 30px;
+	font-size: 1.2em;
+	padding-left: 1em;
+	background: #5E5F59; 
+   background: -webkit-linear-gradient(#286090, white); 
+   background: -o-linear-gradient(#286090, white); 
+   background: -moz-linear-gradient(#286090, white);
+   background: linear-gradient(#286090, white);  
+}
+
+h4.title-text {
+	position: absolute;
+	font-size: 22px;
+	font-weight: 900;
+	margin-top: 4px;
+	color: #2F4351;
+}
+
+div.task {
+	margin-bottom: 1em;
+	border-bottom: 2px solid #ffffff;
+	padding: 0;
+}
+
+div.taskElements {
+	padding: 0;
+	border-bottom: 2px solid #ffffff;
+	padding: .8em;
+	width: 100%;
+}
+
+ol {
+   margin-left: 0;
+   padding-right: 0;
+   list-style-type: none;
+}
+
+ol.order-number {
+	margin-left: -40px; /* Para fazer uma correção e centrar a página em small screens "VER DEPOIS"*/
+}
+
+li {
+    counter-increment: step-counter;
+    margin-top: 1em;
+}
+
+li::before {
+    content: counter(step-counter);
+    margin-right: 5px;
+    font-size: 100%;
+    background-color: rgb(47, 67, 81);
+    color: white;
+    font-weight: bold;
+    padding: 5px 15px;
+    border-radius: 3px;
+}
+
+p.task-item {
+	font-size: 1em;
+	text-align: left;
+	padding-left: 5em;
+	
+ }
+ 
+div.taskContent {
+	background: #E2E9EE;    
+	border-radius: 5px;
+	font-size: 1.2em;
+	border: 1px solid #96A9B0;
+}
+
+button.button-delete {
+	margin-right: -12px;
+	margin-top: 3px;
+}
+
+
+
+
 
