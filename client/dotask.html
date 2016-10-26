@@ -1,0 +1,28 @@
+<head>
+  <title>doTask</title>
+</head>
+
+<body>
+  <div class="container">
+  	{{> getTasksForm}}
+  </div>
+</body>
+
+<template name="getTasksForm">
+	<div class="row">
+		<div class="col-md-6">
+			<button class="btn-primary js-btn-add-task add-new-task">
+				<span class="glyphicon glyphicon-plus" aria-hiden="true"></span>
+			</button>
+			<form>
+				<input type="text" name="taskTitle" value="" placeholder="Add task title" id="" />
+				<input type="text" name="taskDetail" value="" placeholder="Add your task here" id="" />
+				<input type="submit" name="some_name" value="Add a Task" placeholder="" class="btn-success" />
+			</form>
+		</div> <!-- / col -->
+		<div class="col-md-6">
+			<h3 class="js-change-add-task-status">Add some task</h3>
+		</div>
+	</div> <!-- / row-->
+</template>
+

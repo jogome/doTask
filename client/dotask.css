@@ -1,0 +1,33 @@
+/*Template getTasksForm group */
+button.js-btn-add-task {
+	width: 4em;
+	height: 4em;
+	padding: -3em .3em;
+	margin-bottom: 3em;
+	margin-left: 28px;
+	border-radius: 50%;
+	outline: 0;
+}
+
+.gliphicon-plus {
+	font-size: 1.5em;
+	word-spacing: -10px;
+}
+
+h3.js-change-add-task-status {
+	float: left;
+	color: #2F4351;
+	margin-left: -480px;
+}
+
+input[type=text] {
+	width: 75%;
+	height: 3em;
+	margin-left: 25px;
+	margin-bottom: 1em;
+}
+
+.btn-success {
+	height: 3em; 
+}
+
