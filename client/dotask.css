@@ -1,4 +1,9 @@
 
+img.dotask-brand  {
+	width: 150px;
+	height: auto;
+}
+
 h1 { /* Main page title*/
 	padding-top: 2em;
 	padding-bottom: 1.5em;
@@ -6,7 +11,7 @@ h1 { /* Main page title*/
 	color: #11283C;
 }
 
-/*Template getTasksForm group */
+/*****Template getTasksForm group *****/
 div.form-group {
 	padding-top: 5em;
 }
@@ -44,7 +49,7 @@ input[type=text] {
 }
 /*END Template getTasksForm group */
 
-/*Template taskWindow group */
+/*****Template taskWindow group *****/
 div.title, .modal-header {
 	height: 30px;
 	font-size: 1.2em;
@@ -87,12 +92,12 @@ ol.order-number {
 	margin-left: -40px; /* Para fazer uma correção e centrar a página em small screens "VER DEPOIS"*/
 }
 
-li {
+li.task-number {
     counter-increment: step-counter;
     margin-top: 1em;
 }
 
-li::before {
+li.task-number::before {
     content: counter(step-counter);
     margin-right: 5px;
     font-size: 100%;
@@ -122,7 +127,83 @@ button.button-delete {
 	margin-top: 3px;
 }
 
+/* Styles the edit input text box */
+div.title input[type="text"].wide-text-edit {
+	height: 1em;
+}
 
+/*****Template dateAndTime_Starting_Ending*****/
+div.user-params-task {
+	padding-bottom: .5em;
+}
 
+div.task-parameter {
+	height: 30px;
+}
 
+/*priority*/
+div.js-task-priority {
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	background-color: #ffffff;
+	border: 1px solid #000000;
+	margin-top: 1px;
+}
+
+div.normal-priority {
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	background-color: #ffffff;
+	border: 1px solid #000000;
+}
+
+div.high-priority {
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	border: 1px solid #000000;
+	background-color: #B82828;
+}
+/* END priority*/
+summary {
+	text-align: center;
+	border: none;
+	outline: none;
+	font-size: 1.2em;
+	font-weight: 900; 
+	color: #1B3246;
+}
+
+div.data-show {
+	background: #E7E8D8; /* background of boxes for time and date render */
+	border: 1px solid #286090;
+}
+
+div.data-show label {
+	color: #2F4351;
+}
+
+div.edit-date {
+	padding-top: 1em;
+   box-shadow:0px 5px 35px 3px #000 inset;
+}
+
+/*Task done*/
+input[type=checkbox] {
+	position: relative;
+	display: inline;
+	float: right;
+	width: 25px;
+	height: 25px;
+	vertical-align: middle;
+	margin-top: 0.1em;
+	margin-right: -12px;
+	outline: 2px solid #286090;
+ }
+ 
+ div.last-params-task {
+ 	box-shadow: 0px 3px 2px 0px black;
+ }
 

@@ -3,12 +3,37 @@
 </head>
 
 <body>
+  {{> navigation}}
   <div class="container">
   	<h1>Put all your tasks in one place</h1>
   	{{> getTasksForm}}
   	{{> taskWindow}}
   </div>
 </body>
+
+
+<template name="navigation">
+	<div class="navbar navbar-default" role="navigation">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="#"><img class="dotask-brand" src="dotask.png"></a>
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse">
+		<ul class="nav navbar-nav">
+			<li class="active"><a href="#">Task List</a></li>
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+			{{> loginButtons}} <!-- here -->
+		</ul>
+	</div>
+</div>
+</template>
+
 
 <template name="getTasksForm">
 	<div class="row form-group">
@@ -28,26 +53,86 @@
 	</div> <!-- / row-->
 </template>
 
+
 <template name="taskWindow">
 	<ol class="order-number">
 	  	{{#each displayTasks}}
-		<li  id="{{_id}}">  
+		<li  id="{{_id}}" class="task-number">  
 			<div class="row task">
 		   	<div class="col-md-12 title form-insert-task">
-		  			<h4 class="title-text">{{taskTitle}}</h4>
+		  			<h4 class="title-text">{{> editableText collection="todotasks" field="taskTitle"}}</h4>
 					<button class="btn-warning pull-right button-delete"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 					</button>
 		  		</div> <!-- col -->
 			</div> <!-- row -->
 						
 			<div class="row">
-		  		<div class="col-md-8 taskElements taskContent"><p class="task-item">{{taskDetail}}</p></div>
+		  		<div class="col-md-8 taskElements taskContent"><p class="task-item">{{> editableText collection="todotasks" field="taskDetail"}}</p></div>
 			</div> <!-- row -->
+			{{> dateAndTime_Starting_Ending}}
 	 	</li>
 	 	{{/each}}
 	</ol>
 	{{> modalTemplate}}
 </template>
+
+
+<template name="dateAndTime_Starting_Ending">	
+		<details>
+		  <summary>Edit Time and Date</summary>
+		    <div class="row user-params-task edit-date">
+			 	<div class="col-md-3 task-parameter">
+			 		<label for="start">Start date:</label>
+			 		<input type="date" class="startDate" name="start" value="{{startDate}}">
+			 	</div>
+			  	<div class="col-md-3 task-parameter">
+			  		<label for="start">Start time:</label>
+			  		<input type="time" class="startTime" value="{{startTime}}">
+			  	</div>
+			
+			   <div class="col-md-3 task-parameter">
+			   	<label for="end">End date:</label>
+			   	<input type="date" class="endDate" name="end" value="{{endDate}}">
+			   </div>
+		      <div class="col-md-3 task-parameter">
+		      	<label for="start">End Time:</label>
+		      	<input type="time" class="endTime" value="{{endTime}}">
+		      </div>
+			</div> <!-- row -->
+		</details>
+												
+		<div class="row user-params-task">
+		  <div class="col-md-3 task-parameter data-show">
+		  	<div class="js-task-priority {{priorityLevel}}"></div>
+		  </div>
+		  <div class="col-md-3 task-parameter data-show">
+		  	<label>Owner:</label>   {{getUser}} 
+		  </div>
+		  <div class="col-md-3 task-parameter data-show">
+		  	<label>Created on:</label>   {{time}} 
+		  </div>
+		  <div class="col-md-3 task-parameter data-show">
+		  	<label>Check if done:&nbsp;&nbsp;&nbsp;</label>
+		  	<input type="checkbox" name="taskdone" class="checkbox" {{checkBox}}>
+		  </div>
+		</div> <!-- row -->
+		
+		<div class="row user-params-task last-params-task">
+		  <div class="col-md-3 task-parameter data-show">
+		  	<label for="start">Start date:</label>   {{startDate}} 
+		  </div>
+		  <div class="col-md-3 task-parameter data-show">
+		  	<label for="start">Start time:</label>   {{startTime}} 
+		  </div>
+		  <div class="col-md-3 task-parameter data-show">
+		  	<label for="end">End date:</label>   {{endDate}} 
+		  </div>
+		  <div class="col-md-3 task-parameter data-show">
+		  	<label for="start">End Time:</label>   {{endTime}} 
+		  </div>
+		</div> <!-- row -->
+</template>
+
 
 <template name="modalTemplate">
 	<div id="modalDeletePost" class="modal fade" role="dialog">
