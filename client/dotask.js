@@ -1,12 +1,46 @@
 /* getTasksForm group*/
+
+//Meteor.subscribe("todotasks");
+
 Template.getTasksForm.onRendered(function() {
 		$("form").hide();
 	});
 
+	/// routing
+  Router.configure({
+	 layoutTemplate: 'ApplicationLayout' 
+  });
+  
+  Router.route('/', function () {
+   this.render('navigation',{
+		to:"navbar"
+	});
+	this.render('welcomePage',{
+		to:"main"
+	});
+  });
+  
+  Router.route('/task_list', function () {
+	this.render('navigation',{
+		to:"navbar"
+	});
+	
+	this.render('getTasksForm',{
+		to:"inputform"
+	});
+    
+	this.render('taskWindow',{
+		to:"main"
+	});
+  });
 
+	
+Meteor.subscribe('tasks');
+	
 /////////
 //// HELPERS
 /////////////////
+
 Template.taskWindow.helpers({
 	"displayTasks": function() {
 		var tasks = Tasks.find({});
@@ -37,7 +71,10 @@ Template.dateAndTime_Starting_Ending.helpers({
 		else {
 			return "";
 		}
-	 }
+	 },
+	"getUser": function() {
+		//return Meteor.call("getUserName");
+	}
 });
 	
 /////////
@@ -56,21 +93,38 @@ Template.getTasksForm.events({
 		var newTaskTitle = event.target.taskTitle.value;
 		var newTaskDetail = event.target.taskDetail.value;
 		// Inserts the task title and the task detail in the database
-		Tasks.insert({
-			taskTitle: newTaskTitle,
-			taskDetail: newTaskDetail,
-			boxChecked: false,
-			priority: 'high',
-			time: formatedTime,
-			startDate: "",
-			startTime: "",
-			endDate: "",
-			endTime: ""
-		});
+		
+		if(newTaskTitle.length !== 0 && newTaskDetail.length) {
+			Meteor.call('insertTasks', newTaskTitle, newTaskDetail, formatedTime);
+		}
+		else {
+		
+			/*////// MODAL confirm remove//*/ 
+			var modalTitle = document.getElementById("modal-alert");
+			var modalText = document.getElementById("modal-text-alert");
+			modalTitle.innerHTML = "doTask inserting task data"
+			modalText.innerHTML = "You have to fill out all fields!";
+		
+			$('#modalAlertWindow').modal('show');
+			
+			var confirm_ok = document.getElementById("ok_thanks");
+		
+		
+		
+			
+			return false;
+			//alert("one field missing to fill out");
+			return false;
+		}
+
 		
 		$("form").toggle('slow');
 			$(".js-change-add-task-status").html("<span class='added-task'>New Task Added!</span>");
 			setTimeout(function() {$(".js-change-add-task-status").html("<span>Add New Task!</span>").show();}, 2000);
+			
+		// Reseting input text fields
+		event.target.taskTitle.value = "";
+		event.target.taskDetail.value = "";
 	}
 	 
 });
@@ -96,7 +150,8 @@ Template.taskWindow.events({
 		confirm_ok.onclick = function() {
 			// add a hide effect and then remove the task
 			$('#'+itemId).hide('slow', function() {
-					Tasks.remove({_id: itemId});
+					//Tasks.remove({_id: itemId});
+					Meteor.call('removeTask', itemId);
 				});
 				return false; 
 	  }
@@ -117,56 +172,52 @@ Template.dateAndTime_Starting_Ending.events({
 			var taskId = this._id;
 			var selectedStartDate = event.target.value;
 			console.log("Starting date preview = "+selectedStartDate);
-			//alert(selectedStartDate);
-			Tasks.update({_id: taskId}, {$set:{startDate: selectedStartDate}});
+			
+			Meteor.call("updateStartDate", taskId, selectedStartDate);
 		},
 		"change input[type=date].endDate": function(event) {
 			var taskId = this._id;
-			// //Session.set("taskId_from_endDate", taskId);
 			var selectedEndDate = event.target.value;
 			console.log("Ending date preview = "+selectedEndDate);
-			//alert(selectedStartDate);
-			Tasks.update({_id: taskId}, {$set:{endDate: selectedEndDate}});
-			// //Session.set("endDate_for_thisId", selectedEndDate);
+			
+			Meteor.call("updateEndDate", taskId, selectedEndDate);
 		},
 		"change input[type=time].startTime": function(event) {
 			var taskId = this._id;
 			var selectedStartTime = event.target.value;
-			console.log("starting time = "+selectedStartTime);
-			//alert(selectedStartDate);
-			Tasks.update({_id: taskId}, {$set:{startTime: selectedStartTime}});
+			
+			Meteor.call("updateStartTime", taskId, selectedStartTime);
 		},
 		"change input[type=time].endTime": function(event) {
 			var taskId = this._id;
 			var selectedEndTime = event.target.value;
-			console.log("ending time = "+selectedEndTime);
-			//alert(selectedStartDate);
-			Tasks.update({_id: taskId}, {$set:{endTime: selectedEndTime}});
+			
+			Meteor.call("updateEndTime", taskId, selectedEndTime);
 		},
 		"click .js-task-priority": function() {
 			console.log("You clicked on me!");
 			var taskId = this._id;
-			//Session.set("actual_Id", taskId);
-			console.log(taskId);
-			var taskPriorityLevel = Tasks.findOne({_id: taskId}).priority;
-			if (taskPriorityLevel == "normal") {
-				Tasks.update({_id: taskId}, {$set: {priority: 'high'}});
-			}
-			else {
-				Tasks.update({_id: taskId}, {$set: {priority: 'normal'}});
-			}	
-				 
+			
+			Meteor.call("updateTaskPriority", taskId); 
 		},
 		"click .checkbox": function() {
 			console.log("You clicked on a checkbox!");
 			console.log("ID"+this._id);
 			var taskId = this._id;
-			var checkBoxValue = Tasks.findOne({_id: taskId}).boxChecked;
-			if (checkBoxValue == false) {
-				Tasks.update({_id: taskId}, {$set: {boxChecked: true}});
-			}
-			else {
-				Tasks.update({_id: taskId}, {$set: {boxChecked: false}});
-			}	
+			
+			Meteor.call("updateCheckboxSatus", taskId);	
 		}	
 });
+
+
+Template.navigation.events({
+	"click li.tasks-window": function() {
+		$("li.active").removeClass('active');
+		$("li.tasks-window").addClass('active');		
+	},
+	"click li.home": function() {
+		$("li.tasks-window").removeClass('active');
+		$("li.home").addClass('active');		
+	}
+});
+

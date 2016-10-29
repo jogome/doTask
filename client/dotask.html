@@ -2,14 +2,23 @@
   <title>doTask</title>
 </head>
 
-<body>
-  {{> navigation}}
-  <div class="container">
-  	<h1>Put all your tasks in one place</h1>
-  	{{> getTasksForm}}
-  	{{> taskWindow}}
-  </div>
-</body>
+
+<template name="ApplicationLayout">
+	{{> yield "navbar"}}
+	{{> yield "homepage"}}
+	<div class="container task-manager">
+		
+		{{> yield "inputform"}}
+		{{> yield "main"}}
+	</div>
+</template>
+
+<template name="welcomePage">
+	<div class="home-page">
+		<h1>Welcome to doTask!</h1>
+		<h3>Put all your tasks in one place</h3>
+	</div>
+</template>
 
 
 <template name="navigation">
@@ -25,7 +34,8 @@
 	</div>
 	<div class="navbar-collapse collapse">
 		<ul class="nav navbar-nav">
-			<li class="active"><a href="#">Task List</a></li>
+			<li class="active home"><a href="/">Home</a></li>
+			<li class="tasks-window"><a href="/task_list">Tasks window</a></li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
 			{{> loginButtons}} <!-- here -->
@@ -36,14 +46,15 @@
 
 
 <template name="getTasksForm">
+	<!--<h1>Put all your tasks in one place</h1>-->
 	<div class="row form-group">
 		<div class="col-md-6">
 			<button class="btn-primary js-btn-add-task add-new-task">
 				<span class="glyphicon glyphicon-plus" aria-hiden="true"></span>
 			</button>
 			<form>
-				<input type="text" name="taskTitle" value="" placeholder="Add task title" id="" />
-				<input type="text" name="taskDetail" value="" placeholder="Add your task here" id="" />
+				<input type="text" name="taskTitle" value="" placeholder="Add task title" id="taskTitle" />
+				<input type="text" name="taskDetail" value="" placeholder="Add your task here" id="taskDetail" />
 				<input type="submit" value="Add a Task" placeholder="" class="btn-success add-task" />
 			</form>
 		</div> <!-- / col -->
@@ -51,6 +62,7 @@
 			<h3 class="js-change-add-task-status">Add some task</h3>
 		</div>
 	</div> <!-- / row-->
+	{{> modalAlert}}
 </template>
 
 
@@ -106,7 +118,7 @@
 		  	<div class="js-task-priority {{priorityLevel}}"></div>
 		  </div>
 		  <div class="col-md-3 task-parameter data-show">
-		  	<label>Owner:</label>   {{getUser}} 
+		  	<label>Owner:</label>   {{userFirtName}} 
 		  </div>
 		  <div class="col-md-3 task-parameter data-show">
 		  	<label>Created on:</label>   {{time}} 
@@ -149,6 +161,26 @@
 			  	<div class="modal-footer">
 					<button type="button" class="btn btn-primary" data-dismiss="modal" id="cancel_delete">Cancel</button>
 					<button type="button" class="btn btn-warning" data-dismiss="modal" id="ok_delete">Yes</button>
+			  </div>
+			</div>
+		</div> <!-- / modal dialog -->
+	</div> <!-- / modal -->	
+</template>
+
+<template name="modalAlert">
+	<div id="modalAlertWindow" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+		<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header" style="">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title" id="modal-alert"></h4>
+			  	</div>
+			  	<div class="modal-body">
+					<p id="modal-text-alert" style="font-size: 18px;"></p>
+			  	</div>
+			  	<div class="modal-footer">
+					<button type="button" class="btn btn-warning" data-dismiss="modal" id="ok_thanks">OK</button>
 			  </div>
 			</div>
 		</div> <!-- / modal dialog -->

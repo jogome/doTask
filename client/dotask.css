@@ -4,8 +4,17 @@ img.dotask-brand  {
 	height: auto;
 }
 
+body {
+	/*background: url("cover.png") no-repeat center;*/
+	background-size: cover;
+	background-color: #F8F8F8;
+	margin-top: 0px;
+	height: 100vh; 
+}
+
+
 h1 { /* Main page title*/
-	padding-top: 2em;
+	padding-top: 1em;
 	padding-bottom: 1.5em;
 	text-align: center;
 	color: #11283C;
@@ -13,7 +22,7 @@ h1 { /* Main page title*/
 
 /*****Template getTasksForm group *****/
 div.form-group {
-	padding-top: 5em;
+	padding-top: 1em;
 }
 
 button.js-btn-add-task {
