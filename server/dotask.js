@@ -2,6 +2,7 @@
 Meteor.publish('tasks', function() {
 	var currentUserId = this.userId;
 	// Return only the tasks that belong to the currentUser
-	return Tasks.find({ createdBy: currentUserId });
+	var allTasks = Tasks.find({ createdBy: currentUserId }, {sort:{priority: -1}});
+	return allTasks;
 });
 

@@ -5,7 +5,7 @@
 
 <template name="ApplicationLayout">
 	{{> yield "navbar"}}
-	{{> yield "homepage"}}
+	
 	<div class="container task-manager">
 		
 		{{> yield "inputform"}}
@@ -13,18 +13,11 @@
 	</div>
 </template>
 
-<template name="welcomePage">
-	<div class="home-page">
-		<h1>Welcome to doTask!</h1>
-		<h3>Put all your tasks in one place</h3>
-	</div>
-</template>
-
 
 <template name="navigation">
 	<div class="navbar navbar-default" role="navigation">
 	<div class="navbar-header">
-		<a class="navbar-brand" href="#"><img class="dotask-brand" src="dotask.png"></a>
+		<a class="navbar-brand" href="/"><img class="dotask-brand" src="logo.png"></a>
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
@@ -35,7 +28,9 @@
 	<div class="navbar-collapse collapse">
 		<ul class="nav navbar-nav">
 			<li class="active home"><a href="/">Home</a></li>
-			<li class="tasks-window"><a href="/task_list">Tasks window</a></li>
+			<li class="tasks-window"><a href="/task_windows">Add Tasks</a></li>
+			<li class="tasks-title-list"><a href="/task_title_list">Tasks List</a></li>
+			<li class="tasks-help"><a href="/task_help">Help</a></li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
 			{{> loginButtons}} <!-- here -->
@@ -44,6 +39,19 @@
 </div>
 </template>
 
+
+<template name="welcomePage">
+	<div class="triangle-left">
+		<!--<h3>Login</h3>-->
+	</div>
+	{{> breadcrumbsHomeActive}}
+	<div class="home-page">
+		<h1>Welcome to doTask!</h1>
+		<h3>We invite you to put all your tasks in one place!</h3>
+		<p>When we know what we have to do is a good step forward! but when we know what we have to do and when we have a place where to register them and keep tracking of them in order to not forget a single task is realy a big step forward. With doTask we invite you to keep it simple!<br>The only thing you have to do is logging and start adding your tasks :) 
+		</p>
+	</div>
+</template>
 
 <template name="getTasksForm">
 	<!--<h1>Put all your tasks in one place</h1>-->
@@ -67,14 +75,18 @@
 
 
 <template name="taskWindow">
+	{{> breadcrumbsTaskWindowActive}}
 	<ol class="order-number">
 	  	{{#each displayTasks}}
 		<li  id="{{_id}}" class="task-number">  
 			<div class="row task">
 		   	<div class="col-md-12 title form-insert-task">
 		  			<h4 class="title-text">{{> editableText collection="todotasks" field="taskTitle"}}</h4>
-					<button class="btn-warning pull-right button-delete"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+		  			
+					<button class="btn-warning pull-right button-delete">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 					</button>
+					
 		  		</div> <!-- col -->
 			</div> <!-- row -->
 						
@@ -186,3 +198,125 @@
 		</div> <!-- / modal dialog -->
 	</div> <!-- / modal -->	
 </template>
+
+<!-- *********************************************** -->
+
+<template name="taskTitleList">
+	<div class="task-title-wrapper">
+		<h1>Task list</h1>
+		{{> breadcrumbsTaskListActive}}
+		<div class="row task">
+					<div class="col-md-12 title form-insert-task">
+			  			
+			  		</div> <!-- col -->
+				</div> <!-- row -->
+		<div class="task-title-list">
+			<ol>
+			{{#each titleList}}
+			<li class="simple-task-title-list">
+			<div class="row">
+				<div class="col-md-8">
+					<a href="/detail/{{_id}}" class="task-title-link">{{taskTitle}}</a> <input type="checkbox" name="taskdone" class="checkbox list-checkbox" {{checkBox}} />
+					{{#if checkBox}}
+					<button class="btn-warning pull-right button-task-list">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+					</button>
+					{{/if}}
+				</div>
+			</div>
+			</li>
+			{{/each}}
+			</ol>	
+			{{> modalTemplate}}
+		</div> <!-- container-->
+	</div>
+</template>
+
+
+<template name="helpPage">
+	<h1>How to use this app</h1>
+	<div class="row help-page">
+		{{> breadcrumbsTaskHelpActive}}
+		<div class="col-md-12">
+			<img src="help.png" class="help" alt="How to add a task" title="help image" width="" height="" />
+		</div>
+	</div>
+	<div class="row help-page">
+		<h2>To add starting date and time</h2>
+		<div class="col-md-12">
+			<img src="help_1.png" class="help" alt="How to add a task" title="help image" width="" height="" />
+		</div>
+	</div>
+	<div class="row help-page">
+		<h2>Action completed</h2>
+		<div class="col-md-12">
+			<img src="help_2.png" class="help" alt="How to add a task" title="help image" width="" height="" />
+		</div>
+	</div>
+</template>
+
+
+<template name="taskDetail">
+	<h1>Task Detail</h1>
+	{{> breadcrumbsTaskDetailActive}}
+	<ol class="order-number">
+		<li  id="{{_id}}" class="task-number">  
+			<div class="row task">
+		   	<div class="col-md-12 title form-insert-task">
+		  			<h4 class="title-text">{{> editableText collection="todotasks" field="taskTitle"}}</h4>
+					<button class="btn-warning pull-right button-delete"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+					</button>
+		  		</div> <!-- col -->
+			</div> <!-- row -->
+						
+			<div class="row">
+		  		<div class="col-md-8 taskElements taskContent"><p class="task-item">{{> editableText collection="todotasks" field="taskDetail"}}</p></div>
+			</div> <!-- row -->
+			{{> dateAndTime_Starting_Ending}}
+	 	</li>
+	</ol>
+	{{> modalTemplate}}
+</template>
+
+
+<template name="breadcrumbsHomeActive">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item active">Home</li>
+	</ol>
+</template>
+
+
+<template name="breadcrumbsTaskWindowActive">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="/">Home</a></li>
+		<li class="breadcrumb-item active">/ &nbsp;&nbsp;Tasks Window</li>
+	</ol>
+</template>
+
+<template name="breadcrumbsTaskListActive">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="/">Home</a></li>
+		<li class="breadcrumb-item">/<a href="/task_windows">/ &nbsp;&nbsp;Tasks Window</a></li>
+		<li class="breadcrumb-item active">/ &nbsp;&nbsp;Tasks List</li>
+	</ol>
+</template>
+
+
+<template name="breadcrumbsTaskDetailActive">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="/">Home</a></li>
+		<li class="breadcrumb-item">/<a href="/task_windows">/ &nbsp;&nbsp;Tasks Window</a></li>
+		<li class="breadcrumb-item">/<a href="/task_title_list">/&nbsp;&nbsp;Tasks List</a></li>
+		<li class="breadcrumb-item active">Task Detal</li>
+	</ol>
+</template>
+
+<template name="breadcrumbsTaskHelpActive">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="/">Home</a></li>
+		<li class="breadcrumb-item">/<a href="/task_windows">/ &nbsp;&nbsp;Tasks Window</a></li>
+		<li class="breadcrumb-item">/<a href="/task_windows">/&nbsp;&nbsp;Tasks List</a></li>
+		<li class="breadcrumb-item active">Help</li>
+	</ol>
+</template>
+

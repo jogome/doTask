@@ -4,12 +4,19 @@ img.dotask-brand  {
 	height: auto;
 }
 
-body {
-	/*background: url("cover.png") no-repeat center;*/
+a.dropdown-toggle {
+	font-size: 1.5em;
+	color: #250C72;
+}
+
+div.home-page {
+	background: url("cover.png") no-repeat center;
 	background-size: cover;
 	background-color: #F8F8F8;
-	margin-top: 0px;
-	height: 100vh; 
+	margin-top: 2em;
+	/*height: 100vh;*/
+	padding-bottom: 2em;
+	box-shadow: 3px 0px 15px #1B3246, -3px 5px 15px #1B3246 
 }
 
 
@@ -17,7 +24,20 @@ h1 { /* Main page title*/
 	padding-top: 1em;
 	padding-bottom: 1.5em;
 	text-align: center;
-	color: #11283C;
+	color: #173D5E;
+}
+
+/*****Template welcomePage *****/
+div.home-page h3 {
+	padding: 3em 3em 1.5em 3em;
+	font-size: 2em;
+	color: #173D5E;
+}
+
+div.home-page p {
+	padding: 0 3em 3em 3em;
+	text-indent: 1em; 
+	font-size: 1.5em;
 }
 
 /*****Template getTasksForm group *****/
@@ -175,6 +195,14 @@ div.high-priority {
 	border: 1px solid #000000;
 	background-color: #B82828;
 }
+
+div.priority p {
+	margin-bottom: 20px;
+	margin-top: -25px;
+	margin-left: 80px;
+	font-weight: 600;
+}
+
 /* END priority*/
 summary {
 	text-align: center;
@@ -215,4 +243,79 @@ input[type=checkbox] {
  div.last-params-task {
  	box-shadow: 0px 3px 2px 0px black;
  }
+ 
+/***********************/
+/*
+.triangle-left {
+	position: absolute;
+	margin-left: 900px; 
+	width: 0;
+	height: 0;
+	border-top: 280px solid transparent;
+	border-right: 100px solid red;
+	border-bottom: 50px solid transparent;
+	-ms-transform: rotate(50deg); /* IE 9 */
+  /* -webkit-transform: rotate(50deg); /* Chrome, Safari, Opera */
+   /*transform: rotate(50deg);
+}*/
 
+/********* taskTitleList *************/
+
+div.task-title-wrapper {
+	margin-top: -55px;
+}
+
+ol.order-number {
+	
+}
+
+div.task-title-list {
+   background: url("cover.png") no-repeat center;
+	background-size: cover;
+	width: 100%;
+	background-color: #F8F8F8;
+	margin-top: -10px;
+	padding-bottom: 2em;
+	padding-top: 1.5em;
+	/*box-shadow: 3px 0px 8px #1B3246, -3px 0px 8px #1B3246*/
+	box-shadow: 0px 3px 2px 0px black;
+}
+
+input[type=checkbox].list-checkbox {
+	float: right;
+}
+
+button.button-task-list {
+	margin-right: -120px;
+}
+
+ol li.simple-task-title-list {
+    list-style-type: decimal-leading-zero;
+    display:block; /*COM ISTO OS DECIMAL NUMBERS NÂO APARECEM*/
+ 
+}
+
+li.simple-task-title-list {
+	
+	
+ 
+}
+
+li.simple-task-title-list:nth-child(even) {
+	background: #E2E9EE;
+}
+
+
+li.simple-task-title-list:nth-child(odd) {
+	background: #E7E8D8;
+}
+
+div.task-title-list a {
+	font-size: 1.8em;
+}
+
+/********** HELP  ************/
+img.help {
+	width: 100%;
+	height: auto;
+} 
