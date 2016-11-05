@@ -123,11 +123,18 @@
 		      	<input type="time" class="endTime" value="{{endTime}}">
 		      </div>
 			</div> <!-- row -->
+			<div class="row user-params-task">
+				<div class="col-md-12 task-parameter">
+					<label>Check to share your task and uncheck to unshare it</label>
+					<input type="checkbox" name="share" class="js-share" {{shareStatus}}>
+				</div>
+			</div>
 		</details>
 												
 		<div class="row user-params-task">
 		  <div class="col-md-3 task-parameter data-show">
-		  	<div class="js-task-priority {{priorityLevel}}"></div>
+		  	<div class="js-task-priority {{priorityLevel}}"><p class="priority">{{#if priority}}<span class="normal">Normal Priority</span>
+		  	{{else}}<span class="normal">High Priority</span>{{/if}}</p></div>
 		  </div>
 		  <div class="col-md-3 task-parameter data-show">
 		  	<label>Owner:</label>   {{userFirtName}} 
@@ -206,27 +213,25 @@
 		<h1>Task list</h1>
 		{{> breadcrumbsTaskListActive}}
 		<div class="row task">
-					<div class="col-md-12 title form-insert-task">
-			  			
-			  		</div> <!-- col -->
-				</div> <!-- row -->
+					<div class="col-md-12 title form-insert-task"></div> <!-- top of the task lists box-->
+		</div> <!-- row -->
 		<div class="task-title-list">
-			<ol>
-			{{#each titleList}}
-			<li class="simple-task-title-list">
 			<div class="row">
 				<div class="col-md-8">
-					<a href="/detail/{{_id}}" class="task-title-link">{{taskTitle}}</a> <input type="checkbox" name="taskdone" class="checkbox list-checkbox" {{checkBox}} />
-					{{#if checkBox}}
-					<button class="btn-warning pull-right button-task-list">
-						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-					</button>
-					{{/if}}
+					<ol class="list-order-number">
+					{{#each titleList}}
+						<li class="simple-task-title-list">
+							<a href="/detail/{{_id}}" class="task-title-link">{{taskTitle}}</a> <input type="checkbox" name="taskdone" class="checkbox list-checkbox" {{checkBox}} />
+							{{#if checkBox}}
+							<button class="btn-warning pull-right button-task-list">
+								<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+							</button>
+							{{/if}}			
+						</li>
+					{{/each}}
+					</ol>
 				</div>
-			</div>
-			</li>
-			{{/each}}
-			</ol>	
+			</div>	
 			{{> modalTemplate}}
 		</div> <!-- container-->
 	</div>

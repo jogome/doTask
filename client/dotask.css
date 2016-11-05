@@ -119,6 +119,7 @@ ol {
 
 ol.order-number {
 	margin-left: -40px; /* Para fazer uma correção e centrar a página em small screens "VER DEPOIS"*/
+	
 }
 
 li.task-number {
@@ -196,10 +197,16 @@ div.high-priority {
 	background-color: #B82828;
 }
 
-div.priority p {
-	margin-bottom: 20px;
-	margin-top: -25px;
-	margin-left: 80px;
+p.priority {
+	width: 100px;
+	margin-left: 30px;
+	font-weight: 600;
+}
+
+span.normal {
+	width: 150px;
+	display: inline-block;
+	margin-left: 0px;
 	font-weight: 600;
 }
 
@@ -265,7 +272,26 @@ div.task-title-wrapper {
 	margin-top: -55px;
 }
 
-ol.order-number {
+ol.list-order-number {
+	margin-left: 0;
+	padding-right: 0;
+	list-style-type: none;
+	
+}
+
+ol.list-order-number li {
+	counter-increment: step-counter;
+}
+
+ol.list-order-number li::before {
+	content: counter(step-counter);
+	margin-right: 5px;
+	font-size: 1.8em;
+	background-color: #2F4351;
+	padding: 0 5px 0 5px;
+	color: #D8F9FF;
+	font-weight: 900;
+	border-radius: 5px;
 	
 }
 
@@ -282,7 +308,7 @@ div.task-title-list {
 }
 
 input[type=checkbox].list-checkbox {
-	float: right;
+	
 }
 
 button.button-task-list {
@@ -290,8 +316,8 @@ button.button-task-list {
 }
 
 ol li.simple-task-title-list {
-    list-style-type: decimal-leading-zero;
-    display:block; /*COM ISTO OS DECIMAL NUMBERS NÂO APARECEM*/
+    /*list-style-type: decimal-leading-zero;*/
+    /*display:block; /*COM ISTO OS DECIMAL NUMBERS NÂO APARECEM*/
  
 }
 
@@ -319,3 +345,16 @@ img.help {
 	width: 100%;
 	height: auto;
 } 
+
+
+input[type=checkbox].share {
+	position: relative;
+	display: inline-block;
+	float: right;
+	width: 25px;
+	height: 25px;
+	vertical-align: middle;
+	margin-top: 0.4em;
+	margin-right: -12px;
+	outline: 2px solid #286090;
+ }

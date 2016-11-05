@@ -1,10 +1,14 @@
 /* doTasak*/
 
-// Hide the text fields of the input form when the page renders
 Template.getTasksForm.onRendered(function() {
 		$("form").hide();
 	});
 	
+
+Meteor.subscribe('tasks');
+Meteor.subscribe('shares'); 
+
+
 /////////	
 /////// ROUTING
 ////////////////
@@ -84,7 +88,6 @@ Template.getTasksForm.onRendered(function() {
 	});
 
 	
-Meteor.subscribe('tasks');
 	
 /////////
 //// HELPERS
@@ -100,13 +103,26 @@ Template.taskWindow.helpers({
 
 Template.dateAndTime_Starting_Ending.helpers({
 	"priorityLevel": function() {
+		// Just for the sake of styling with css, to add a class
 		var taskId = this._id;
 		var taskPriorityLevel = Tasks.findOne({_id: taskId}).priority;
 		if (taskPriorityLevel == 'normal') {
-			return "high-priority";
+			return "normal-priority";
 		}
 		else {
-			return  "normal-priority";
+			return  "high-priority";
+		} 
+	 },
+	 "priority": function() {
+		// to switch the text to "High Priority" and "Normal Priority"
+		var taskId = this._id;
+		var taskPriorityLevel = Tasks.findOne({_id: taskId}).priority;
+		if (taskPriorityLevel == 'normal') {
+			return true
+		}
+		else {
+			Session.get("priority");
+			return  false;
 		} 
 	 },
 	 "checkBox": function() {
@@ -131,6 +147,13 @@ Template.dateAndTime_Starting_Ending.helpers({
 			return "unknown";
 		}
 		console.log("The user name is: "+user.username);
+	},
+	"shareStatus": function() { // VER O CODIGO
+		var taskId = this._id;
+		var status = Tasks.findOne({_id: taskId}).share;
+		if (status === true) {
+		   return "checked";
+		}
 	}
 });
 
@@ -281,14 +304,22 @@ Template.dateAndTime_Starting_Ending.events({
 		"click .js-task-priority": function() {
 			console.log("You clicked on me!");
 			var taskId = this._id;
+			var taskPriorityLevel = Tasks.findOne({_id: taskId}).priority;
+			console.log("NEW"+taskPriorityLevel);
 			
-			Meteor.call("updateTaskPriority", taskId); 
+			Meteor.call("updateTaskPriority", taskId, taskPriorityLevel); 
 		},
 		"click .checkbox": function() {
 			console.log("You clicked on a checkbox!");
 			console.log("ID"+this._id);
 			var taskId = this._id;
 			Meteor.call("updateCheckboxSatus", taskId);	
+		},
+		"click .js-share": function(event) {
+			console.log("You clicked on share " + event.target.checked +"" +this._id);
+			var taskId = this._id;
+			var shareCheckboxStatus = event.target.checked;
+			Meteor.call("shareStatus", taskId, shareCheckboxStatus);
 		}	
 });
 

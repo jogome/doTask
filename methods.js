@@ -15,12 +15,13 @@ Meteor.methods({
 				createdBy: currentUserId,
 				userFirtName: user,
 				boxChecked: false,
-				priority: 'high',
+				priority: "normal",
 				time: formatedTime,
 				startDate: "",
 				startTime: "",
 				endDate: "",
-				endTime: ""
+				endTime: "",
+				share: false
 			});
 			
 		}
@@ -46,13 +47,19 @@ Meteor.methods({
 	"updateEndTime": function(taskId, selectedStartEndDateTime) {
 		Tasks.update({_id: taskId}, {$set:{endTime: selectedStartEndDateTime}});
 	},
-	"updateTaskPriority": function(taskId) {
-		var taskPriorityLevel = Tasks.findOne({_id: taskId}).priority;
-		if (taskPriorityLevel == "normal") {
-			Tasks.update({_id: taskId}, {$set: {priority: 'high'}});
-		}
-		else {
+	"updateTaskPriority": function(taskId, taskPriorityLevel) {
+		//var taskPriorityLevel = Tasks.findOne({_id: taskId}).priority;
+		//console.log("The priority of this task is:" + taskPriorityLevel);
+		if (taskPriorityLevel === "high") {
+			console.log("YES!");
 			Tasks.update({_id: taskId}, {$set: {priority: 'normal'}});
+			//var highPriority = "high";
+			//Session.set("priority", highPriority);
+		}
+		else if((taskPriorityLevel === "normal")){
+			Tasks.update({_id: taskId}, {$set: {priority: 'high'}});
+			//var normalPriority = "Normal";
+			//Session.set("priority", normalPriority);
 		}	
 	},
 	"updateCheckboxSatus": function(taskId) {
@@ -63,6 +70,10 @@ Meteor.methods({
 		else {
 			Tasks.update({_id: taskId}, {$set: {boxChecked: false}});
 		}
+	},
+	"shareStatus": function(taskId, checkBoxValue) {
+		// update the share status by getting the checkbox value
+		Tasks.update({_id: taskId}, {$set: {share: checkBoxValue} })
 	}
 	
 });
