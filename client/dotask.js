@@ -86,11 +86,6 @@ Meteor.subscribe('shares');
 		});
 	});
 
-
-// USERS LIST Need WORK
-
-// By applaying this.render() refere-se ao utilizador currente
-// POSSIBLE HELP: http://stackoverflow.com/questions/23351699/iron-router-can-i-target-a-specific-nested-template-to-display-my-loadingtempla
 Router.route('/userlist', {
 	name: 'navigation',
     name: 'usersTemplate',
