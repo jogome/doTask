@@ -1,12 +1,11 @@
 /* doTasak*/
-
 Template.getTasksForm.onRendered(function() {
 		$("form").hide();
 	});
-	
 
 Meteor.subscribe('tasks');
 Meteor.subscribe('shares'); 
+//Meteor.subscribe('usersList');
 
 
 /////////	
@@ -87,16 +86,59 @@ Meteor.subscribe('shares');
 		});
 	});
 
-	
+
+// USERS LIST Need WORK
+
+// By applaying this.render() refere-se ao utilizador currente
+// POSSIBLE HELP: http://stackoverflow.com/questions/23351699/iron-router-can-i-target-a-specific-nested-template-to-display-my-loadingtempla
+Router.route('/userlist', {
+	name: 'navigation',
+    name: 'usersTemplate',
+    waitOn: function() {
+        return Meteor.subscribe('userList');
+    },
+    data: function() {
+        return Meteor.users.find({});       
+    }
+ });
+ 
+ 
+Router.route('/personalfriends', {
+	//name: 'navigation',
+    name: 'personalFriends',
+    waitOn: function() {
+        return Meteor.subscribe('personalFriendList');
+    },
+    data: function() {
+        return Friends.find({});       
+    }
+ });
 	
 /////////
 //// HELPERS
 /////////////////
 
+Template.getTasksForm.helpers({
+	"actualUser": function() {
+		var user = Session.get("userName");
+		return user;
+	}
+})
+
+
 Template.taskWindow.helpers({
 	"displayTasks": function() {
-		var tasks = Tasks.find({});
+		var tasks = Tasks.find({}, {sort: {priority: 1}});
 		return tasks;
+	},
+	"isTaskOwner": function() {
+		/* This is comparing ids */
+		var whoCreatedThisTask = this.createdBy;
+		var whoIsLookingThisTask = Meteor.user()._id;
+		if (whoCreatedThisTask === whoIsLookingThisTask) {
+			//Session.set("isTaskOwner", true);
+			return true;
+		}	
 	}
 });
 
@@ -154,6 +196,15 @@ Template.dateAndTime_Starting_Ending.helpers({
 		if (status === true) {
 		   return "checked";
 		}
+	},
+	"isOwner": function() {
+		/* This is comparing ids */
+		var whoCreatedThisTask = this.createdBy;
+		var whoIsLookingThisTask = Meteor.user()._id;
+		if (whoCreatedThisTask === whoIsLookingThisTask) {
+			Session.set("isOwner", true);
+			return true;
+		}	
 	}
 });
 
@@ -165,7 +216,6 @@ Template.taskTitleList.helpers({
 	},
 	"checkBox": function() {
 		var taskId = this._id;
-		//console.log("The value= "+Tasks.findOne({_id: taskId}).boxChecked);
 		var checkBoxValue = Tasks.findOne({_id: taskId}).boxChecked;
 		if (checkBoxValue == true) {
 			console.log("Box value = "+checkBoxValue);
@@ -176,6 +226,37 @@ Template.taskTitleList.helpers({
 			return "";
 		}
 	 }
+});
+
+
+Template.taskDetail.helpers({
+	"isTaskDetailOwner": function() {
+		/* This is comparing ids */
+		var whoCreatedThisTask = this.createdBy;
+		var whoIsLookingThisTask = Meteor.user()._id;
+		if (whoCreatedThisTask === whoIsLookingThisTask) {
+			//Session.set("isOwner", true);
+			return true;
+		}	
+	}
+}); 
+
+
+/* System users list */
+Template.usersTemplate.helpers({
+	"usersList": function() {  
+	   var allUsers = Meteor.users.find({}, {sort: {"profile.firstName": 1}});
+	   console.log("The users: "+allUsers);
+	   return allUsers;
+	}
+});
+
+/* Personal friends list */
+Template.personalFriends.helpers({
+	"friendList": function() {
+		var actualUser = Meteor.user();
+		return Friends.find({}, {sort: {createdBy: actualUser, friendFirstName: 1}});
+	}
 });
 
 
@@ -191,6 +272,7 @@ Template.getTasksForm.events({
 	"submit form": function(event) {
 	   // prevents the form to refresh when submited the tasks
 		event.preventDefault(); 
+
 		// Getting the value entered in the task title and task details fields 
 		var newTaskTitle = event.target.taskTitle.value;
 		var newTaskDetail = event.target.taskDetail.value;
@@ -198,11 +280,13 @@ Template.getTasksForm.events({
 		// Get the user name
 		var user = Meteor.user().profile;
 		user[Object.keys(user)[0]];
-		var names = user[Object.keys(user)[0]];
+		var name = user[Object.keys(user)[0]];
+		//console.log("This name is: "+names);
+		Session.set("userName", name);
 			
 		if(newTaskTitle.length !== 0 && newTaskDetail.length !== 0) {
 			// Inserts the task title and the task detail in the database
-			Meteor.call('insertTasks', newTaskTitle, newTaskDetail, formatedTime, names);
+			Meteor.call('insertTasks', newTaskTitle, newTaskDetail, formatedTime, name);
 		}
 		else {
 		
@@ -215,19 +299,16 @@ Template.getTasksForm.events({
 			$('#modalAlertWindow').modal('show');
 			
 			var confirm_ok = document.getElementById("ok_thanks");
-		
-		
-		
 			
 			return false;
 			//alert("one field missing to fill out");
-			return false;
+			//return false;
 		}
 
 		
 		$("form").toggle('slow');
 			$(".js-change-add-task-status").html("<span class='added-task'>New Task Added!</span>");
-			setTimeout(function() {$(".js-change-add-task-status").html("<span>Add New Task!</span>").show();}, 2000);
+			setTimeout(function() {$(".js-change-add-task-status").html("<span>Add New Task " + name + "!</span>").show();}, 2000);
 			
 		// Reseting input text fields
 		event.target.taskTitle.value = "";
@@ -267,6 +348,7 @@ Template.taskWindow.events({
 });
 
 /* Formating the date and time*/
+
 var dateNow = new Date();
 	// formating the date
 	var yearMonthDay = dateNow.toLocaleDateString();
@@ -362,37 +444,24 @@ Template.taskTitleList.events({
 	}
 });
 
-// managing the active tab (MUST find a more elegant way)
-Template.navigation.events({
-	"click li.tasks-window": function() {
-		$("li.active").removeClass('active');
-		$("li.tasks-window").addClass('active');		
-	},
-	"click li.home": function() {
-		$("li.home").addClass('active');
-		$("li.tasks-window").removeClass('active');
-		$("li.tasks-title-list").removeClass('active');
-		$("li.tasks-help").removeClass('active');		
-	},
-	"click li.tasks-title-list": function() {
-		$("li.tasks-window").removeClass('active');
-		$("li.home").removeClass('active');
-		$("li.tasks-help").removeClass('active');
-		$("li.tasks-title-list").addClass('active');		
-	},
-	"click li.tasks-help": function() {
-		$("li.tasks-window").removeClass('active');
-		$("li.home").removeClass('active');
-		$("li.tasks-title-list").removeClass('active');
-		$("li.tasks-help").addClass('active');		
-	},
-	"click .navbar-brand":function() {
-		$("li.home").addClass('active');
-		$("li.tasks-window").removeClass('active');
-		$("li.tasks-title-list").removeClass('active');
-		$("li.tasks-help").removeClass('active');
+Template.usersTemplate.events({
+	"click .users": function() {
+		//console.log(this._id);
+		var userNameId = this._id;
+		console.log("User ID: "+userNameId);
+		var userFirstName = this.profile.firstName; //Meteor.users.find({_id: userNameId});
+		var userLastName = this.profile.lastName;
+		console.log("Friend Name: "+userFirstName + " " + userLastName);
+		
+		Meteor.call("addFriend", userNameId, userFirstName, userLastName);
 	}
 });
 
 
-
+Template.personalFriends.events({
+	"click .js-remove-friend": function() {
+		friendId = this._id;
+		console.log("to remove: "+friendId);
+		Meteor.call("removeFriendFromList", friendId);
+	}
+});

@@ -1,4 +1,4 @@
-
+/* doTask style */
 img.dotask-brand  {
 	width: 150px;
 	height: auto;
@@ -308,7 +308,7 @@ div.task-title-list {
 }
 
 input[type=checkbox].list-checkbox {
-	
+		
 }
 
 button.button-task-list {
